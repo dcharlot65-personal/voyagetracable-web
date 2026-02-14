@@ -1,0 +1,156 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import GlassCard from "../components/GlassCard.astro";
+---
+
+<Layout>
+  <!-- Hero -->
+  <section class="relative overflow-hidden min-h-screen flex items-center justify-center" id="hero">
+    <canvas id="galaxy-canvas" class="absolute inset-0 w-full h-full"></canvas>
+
+    <!-- Glow orbs -->
+    <div class="absolute top-1/4 left-1/3 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-accent-dark/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center pt-20">
+      <p data-reveal class="section-label mb-6">// VOYAGE TRACABLE</p>
+      <h1 data-reveal class="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight text-white">
+        Where Ideas Become<br />
+        <span class="gradient-violet">Worlds</span>
+      </h1>
+      <p data-reveal class="text-brand-slate text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed mb-10">
+        A creative holding company building at the intersection of storytelling, play, and technology.
+      </p>
+      <div data-reveal class="flex flex-wrap justify-center gap-4">
+        <a href="#ventures" class="btn-primary">Explore Ventures</a>
+        <a href="#about" class="btn-secondary">About Us</a>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="mt-16 scroll-cue">
+        <svg class="w-6 h-6 mx-auto text-accent/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ventures -->
+  <section class="py-20" id="ventures">
+    <div class="max-w-6xl mx-auto px-6">
+      <SectionHeading
+        label="VENTURES"
+        title="The Creative Galaxy"
+        subtitle="Three ventures united by a love of ideas, innovation, and imagination."
+        align="center"
+      />
+
+      <div class="grid md:grid-cols-3 gap-8" data-reveal-stagger>
+        <!-- Publishing -->
+        <a href="https://davidjpublishing.com" target="_blank" rel="noopener noreferrer" class="group glass-card venture-gold overflow-hidden block">
+          <div class="p-8">
+            <div class="w-14 h-14 mb-5 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
+              <svg class="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.331 0 4.471.89 6.07 2.35.1.08.2.15.31.21a.75.75 0 00.69-.01c.1-.06.2-.13.3-.21A8.968 8.968 0 0118 18c1.052 0 2.062.18 3 .512V4.262A8.958 8.958 0 0018 3.75a8.967 8.967 0 00-6 2.292z" />
+              </svg>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-white mb-2 group-hover:text-gold transition-colors">David J Charlot Publishing</h3>
+            <p class="text-brand-gray text-sm font-mono mb-3">// Fiction & Non-Fiction</p>
+            <p class="text-brand-slate leading-relaxed mb-6">
+              20 titles spanning science fiction epics, children's adventure series, AI philosophy, faith, and patent law. Stories that spark the imagination and ideas that reshape understanding.
+            </p>
+            <span class="inline-flex items-center gap-2 text-gold text-sm font-semibold group-hover:gap-3 transition-all">
+              Explore the Catalog
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Inspired Mile -->
+        <a href="https://sonnetman.inspiredmile.com" target="_blank" rel="noopener noreferrer" class="group glass-card venture-emerald overflow-hidden block">
+          <div class="p-8">
+            <div class="w-14 h-14 mb-5 rounded-full bg-emerald/10 border border-emerald/20 flex items-center justify-center">
+              <svg class="w-7 h-7 text-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+              </svg>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-white mb-2 group-hover:text-emerald transition-colors">Inspired Mile</h3>
+            <p class="text-brand-gray text-sm font-mono mb-3">// Gaming & Entertainment</p>
+            <p class="text-brand-slate leading-relaxed mb-6">
+              Shakespeare meets AI in a trading card battle arena. Featuring augmented reality, AI-powered rap battles, NFT collectibles, and the legendary Sonnet Man character.
+            </p>
+            <span class="inline-flex items-center gap-2 text-emerald text-sm font-semibold group-hover:gap-3 transition-all">
+              Meet Sonnet Man
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- PlayDimension -->
+        <a href="https://playdimension.ai" target="_blank" rel="noopener noreferrer" class="group glass-card venture-blue overflow-hidden block">
+          <div class="p-8">
+            <div class="w-14 h-14 mb-5 rounded-full bg-blue/10 border border-blue/20 flex items-center justify-center">
+              <svg class="w-7 h-7 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.657-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+              </svg>
+            </div>
+            <h3 class="font-display text-2xl font-bold text-white mb-2 group-hover:text-blue transition-colors">PlayDimension</h3>
+            <p class="text-brand-gray text-sm font-mono mb-3">// Strategy & Neuroscience</p>
+            <p class="text-brand-slate leading-relaxed mb-6">
+              A hex-grid strategy board game where neuroscience meets gameplay. Inspired by machine learning concepts, neural architectures, and the science of decision-making.
+            </p>
+            <span class="inline-flex items-center gap-2 text-blue text-sm font-semibold group-hover:gap-3 transition-all">
+              Enter the Grid
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="py-20" id="about">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <div class="section-divider mb-12 max-w-xs mx-auto border-t border-white/5"></div>
+      <SectionHeading label="ABOUT" title="The Mind Behind the Galaxy" align="center" />
+      <div data-reveal class="glass-card specular-border p-8 md:p-10">
+        <p class="text-brand-slate text-lg leading-relaxed mb-6">
+          Voyage Tracable, LLC is the creative holding company of David J Charlot — physicist, bioengineer, author, game designer, and founder. What began as a passion for storytelling has grown into a constellation of ventures that span publishing, interactive entertainment, and AI-driven gaming.
+        </p>
+        <p class="text-brand-slate text-lg leading-relaxed mb-8">
+          Every project in the Voyage Tracable galaxy shares a common thread: the belief that great ideas deserve great vehicles. Whether it's a novel that rewires how you think about consciousness, a card game that makes Shakespeare cool again, or a board game that teaches you neural networks by playing one — the mission is always the same: make ideas come alive.
+        </p>
+        <a
+          href="https://davidjcharlot.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-secondary inline-flex"
+        >
+          Visit davidjcharlot.com
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { initNeuralGalaxy } from '../scripts/neural-galaxy';
+
+  const canvas = document.getElementById('galaxy-canvas') as HTMLCanvasElement;
+  const hero = document.getElementById('hero')!;
+
+  if (canvas && hero) {
+    initNeuralGalaxy(canvas, hero);
+  }
+</script>

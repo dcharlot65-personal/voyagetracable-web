@@ -1,0 +1,20 @@
+---
+interface Props {
+  href?: string;
+  class?: string;
+  specular?: boolean;
+}
+
+const { href, class: className = '', specular = false } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const baseClass = `glass-card ${specular ? 'specular-border' : ''} ${className}`.trim();
+---
+
+<Tag
+  href={href}
+  class={baseClass}
+  target={href?.startsWith('http') ? '_blank' : undefined}
+  rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+>
+  <slot />
+</Tag>

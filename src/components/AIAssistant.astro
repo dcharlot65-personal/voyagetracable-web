@@ -1,0 +1,355 @@
+---
+interface Props {
+  siteName: string;
+  siteContext: string;
+  accentColor?: string;
+}
+
+const { siteName, siteContext, accentColor } = Astro.props;
+---
+
+<div
+  id="ai-assistant-root"
+  class="ai-assistant"
+  data-site-name={siteName}
+  data-site-context={siteContext}
+  data-accent={accentColor || ''}
+>
+  <!-- Music toggle -->
+  <button id="ai-music-toggle" class="ai-music-btn" aria-label="Toggle ambient music" title="Ambient music">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+    </svg>
+  </button>
+
+  <!-- FAB -->
+  <button id="ai-fab" class="ai-fab" aria-label="Open AI assistant" title="AI Assistant">
+    <div id="ai-fab-ring" class="ai-fab-ring"></div>
+    <!-- Chat icon -->
+    <svg id="ai-fab-icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+    </svg>
+    <!-- Close icon (hidden) -->
+    <svg id="ai-fab-icon-close" class="ai-hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  </button>
+
+  <!-- Chat panel -->
+  <div id="ai-panel" class="ai-panel" aria-hidden="true">
+    <!-- Header -->
+    <div class="ai-panel-header">
+      <span class="ai-panel-title">AI Assistant</span>
+      <span id="ai-status" class="ai-panel-status"></span>
+      <button id="ai-panel-close" class="ai-panel-close" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Download progress -->
+    <div id="ai-download" class="ai-download-bar ai-hidden">
+      <div class="ai-download-track">
+        <div id="ai-download-fill" class="ai-download-fill"></div>
+      </div>
+      <span id="ai-download-text" class="ai-download-text"></span>
+    </div>
+
+    <!-- Messages -->
+    <div id="ai-messages" class="ai-messages">
+      <div class="ai-welcome">
+        <p>Hi! I'm the <strong>{siteName}</strong> AI assistant.</p>
+        <p>Ask me anything about this site, or just say hello.</p>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="ai-input-area">
+      <button id="ai-mic-btn" class="ai-icon-btn" aria-label="Voice input" title="Voice input">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" />
+          <path d="M19 10v2a7 7 0 01-14 0v-2" />
+          <line x1="12" y1="19" x2="12" y2="23" />
+          <line x1="8" y1="23" x2="16" y2="23" />
+        </svg>
+      </button>
+      <input id="ai-input" class="ai-input" type="text" placeholder="Ask me anything..." autocomplete="off" />
+      <button id="ai-tts-btn" class="ai-icon-btn" aria-label="Toggle read aloud" title="Read aloud">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+          <path d="M19.07 4.93a10 10 0 010 14.14" />
+          <path d="M15.54 8.46a5 5 0 010 7.07" />
+        </svg>
+      </button>
+      <button id="ai-send-btn" class="ai-send-btn" aria-label="Send message" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13" />
+          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { AIEngine } from '../scripts/ai-engine';
+  import { AmbientMusic } from '../scripts/ambient-music';
+  import { SpeechIO } from '../scripts/speech-io';
+
+  // ---- INIT ----
+  const root = document.getElementById('ai-assistant-root')!;
+  const siteName = root.dataset.siteName || 'This Site';
+  const siteContext = root.dataset.siteContext || '';
+
+  const engine = new AIEngine();
+  engine.setSystemPrompt(siteName, siteContext);
+
+  const music = new AmbientMusic();
+  const speech = new SpeechIO();
+
+  // ---- ACCENT COLOR DETECTION ----
+  const accentProp = root.dataset.accent;
+  if (accentProp) {
+    const resolved = getComputedStyle(document.documentElement).getPropertyValue(accentProp).trim();
+    if (resolved) root.style.setProperty('--ai-accent', resolved);
+  }
+
+  // ---- DOM REFS ----
+  const fab = document.getElementById('ai-fab')!;
+  const fabIconChat = document.getElementById('ai-fab-icon-chat')!;
+  const fabIconClose = document.getElementById('ai-fab-icon-close')!;
+  const fabRing = document.getElementById('ai-fab-ring')!;
+  const panel = document.getElementById('ai-panel')!;
+  const panelClose = document.getElementById('ai-panel-close')!;
+  const statusEl = document.getElementById('ai-status')!;
+  const downloadBar = document.getElementById('ai-download')!;
+  const downloadFill = document.getElementById('ai-download-fill')!;
+  const downloadText = document.getElementById('ai-download-text')!;
+  const messagesEl = document.getElementById('ai-messages')!;
+  const inputEl = document.getElementById('ai-input') as HTMLInputElement;
+  const sendBtn = document.getElementById('ai-send-btn') as HTMLButtonElement;
+  const micBtn = document.getElementById('ai-mic-btn')!;
+  const ttsBtn = document.getElementById('ai-tts-btn')!;
+  const musicBtn = document.getElementById('ai-music-toggle')!;
+
+  let panelOpen = false;
+  let generating = false;
+  let modelLoadStarted = false;
+
+  // Hide mic button if STT unsupported
+  if (!speech.isSTTSupported) {
+    micBtn.classList.add('ai-hidden');
+  }
+
+  // ---- PANEL TOGGLE ----
+  function openPanel() {
+    panelOpen = true;
+    panel.classList.add('visible');
+    panel.setAttribute('aria-hidden', 'false');
+    fabIconChat.classList.add('ai-hidden');
+    fabIconClose.classList.remove('ai-hidden');
+    fab.classList.add('open');
+    inputEl.focus();
+
+    // Stop Lenis on mobile
+    if (window.innerWidth <= 480) {
+      (window as any).__lenis?.stop();
+    }
+
+    // Start model load on first open
+    if (!modelLoadStarted && !engine.isReady) {
+      modelLoadStarted = true;
+      loadModel();
+    }
+  }
+
+  function closePanel() {
+    panelOpen = false;
+    panel.classList.remove('visible');
+    panel.setAttribute('aria-hidden', 'true');
+    fabIconChat.classList.remove('ai-hidden');
+    fabIconClose.classList.add('ai-hidden');
+    fab.classList.remove('open');
+
+    // Resume Lenis
+    (window as any).__lenis?.start();
+  }
+
+  fab.addEventListener('click', () => {
+    if (panelOpen) closePanel();
+    else openPanel();
+  });
+
+  panelClose.addEventListener('click', closePanel);
+
+  // ---- MODEL LOADING ----
+  async function loadModel() {
+    engine.onProgress((p) => {
+      // Status indicator
+      if (p.status === 'ready') {
+        statusEl.textContent = 'ready';
+        statusEl.classList.add('ready');
+        downloadBar.classList.add('ai-hidden');
+        fabRing.classList.remove('loading');
+      } else if (p.status === 'unsupported' || p.status === 'error') {
+        statusEl.textContent = 'basic mode';
+        downloadBar.classList.add('ai-hidden');
+        fabRing.classList.remove('loading');
+      } else {
+        statusEl.textContent = `${p.progress}%`;
+        downloadBar.classList.remove('ai-hidden');
+        downloadFill.style.width = `${p.progress}%`;
+        downloadText.textContent = truncateMsg(p.message);
+        fabRing.classList.add('loading');
+      }
+    });
+
+    const success = await engine.loadModel();
+
+    if (!success && !AIEngine.isSupported()) {
+      addMessage('assistant', "I'm running in basic mode — your browser doesn't support WebGPU. For the full AI experience, try Chrome 113+ or Edge. I can still help with basic questions about the site!");
+    }
+  }
+
+  function truncateMsg(msg: string): string {
+    return msg.length > 50 ? msg.slice(0, 50) + '...' : msg;
+  }
+
+  // ---- MESSAGES ----
+  function addMessage(role: 'user' | 'assistant', content: string): HTMLDivElement {
+    // Remove welcome message on first real message
+    const welcome = messagesEl.querySelector('.ai-welcome');
+    if (welcome) welcome.remove();
+
+    const div = document.createElement('div');
+    div.className = `ai-msg ${role}`;
+    div.textContent = content;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function addTypingIndicator(): HTMLDivElement {
+    const div = document.createElement('div');
+    div.className = 'ai-typing';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  // ---- SEND MESSAGE ----
+  async function sendMessage(text: string) {
+    if (!text.trim() || generating) return;
+
+    generating = true;
+    sendBtn.disabled = true;
+    inputEl.value = '';
+
+    addMessage('user', text.trim());
+    const typing = addTypingIndicator();
+
+    let responseText = '';
+
+    try {
+      // Use streaming if engine is ready
+      if (engine.isReady) {
+        typing.remove();
+        const msgEl = addMessage('assistant', '');
+
+        for await (const chunk of engine.generateStream(text.trim())) {
+          responseText += chunk;
+          msgEl.textContent = responseText;
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+      } else {
+        responseText = await engine.generate(text.trim());
+        typing.remove();
+        addMessage('assistant', responseText);
+      }
+
+      // TTS
+      if (speech.isTTSEnabled && responseText) {
+        speech.speak(responseText);
+      }
+    } catch {
+      typing.remove();
+      addMessage('assistant', 'Something went wrong. Please try again.');
+    }
+
+    generating = false;
+    updateSendButton();
+  }
+
+  // ---- INPUT HANDLING ----
+  inputEl.addEventListener('input', updateSendButton);
+
+  inputEl.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(inputEl.value);
+    }
+  });
+
+  sendBtn.addEventListener('click', () => {
+    sendMessage(inputEl.value);
+  });
+
+  function updateSendButton() {
+    sendBtn.disabled = !inputEl.value.trim() || generating;
+  }
+
+  // ---- MIC (STT) ----
+  micBtn.addEventListener('click', () => {
+    if (speech.isListening) {
+      speech.stopListening();
+      micBtn.classList.remove('recording');
+    } else {
+      micBtn.classList.add('recording');
+      speech.startListening(
+        (text) => {
+          inputEl.value = text;
+          updateSendButton();
+          sendMessage(text);
+        },
+        () => {
+          micBtn.classList.remove('recording');
+        }
+      );
+    }
+  });
+
+  // ---- TTS TOGGLE ----
+  ttsBtn.addEventListener('click', () => {
+    const enabled = speech.toggleTTS();
+    ttsBtn.classList.toggle('active', enabled);
+  });
+
+  // ---- MUSIC TOGGLE ----
+  musicBtn.addEventListener('click', async () => {
+    const playing = await music.toggle();
+    musicBtn.classList.toggle('active', playing);
+    localStorage.setItem('ai-music-pref', playing ? 'on' : 'off');
+  });
+
+  // Restore music preference (but don't autoplay — just show active state)
+  if (localStorage.getItem('ai-music-pref') === 'on') {
+    // User previously had music on — show the button as "ready to resume"
+    // Can't autoplay without gesture, so we leave it inactive
+  }
+
+  // ---- KEYBOARD SHORTCUT ----
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    // Ctrl/Cmd + Shift + A to toggle assistant
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+      e.preventDefault();
+      if (panelOpen) closePanel();
+      else openPanel();
+    }
+  });
+</script>

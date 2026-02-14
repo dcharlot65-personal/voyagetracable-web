@@ -1,0 +1,23 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  subtitle?: string;
+  align?: 'left' | 'center';
+}
+
+const { label, title, subtitle, align = 'left' } = Astro.props;
+const alignClass = align === 'center' ? 'text-center' : '';
+---
+
+<div class={`mb-12 md:mb-16 ${alignClass}`}>
+  <p class="section-label mb-3">// {label}</p>
+  <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-4 leading-tight">
+    <Fragment set:html={title} />
+  </h2>
+  {subtitle && (
+    <p class={`text-lg md:text-xl text-brand-slate leading-relaxed ${align === 'center' ? 'max-w-2xl mx-auto' : 'max-w-2xl'}`}>
+      {subtitle}
+    </p>
+  )}
+</div>

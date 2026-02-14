@@ -1,0 +1,274 @@
+@import "tailwindcss";
+@import "./assistant.css";
+
+/* ═══════════════════════════════════════════════════════════════
+   Voyage Tracable — Dark Futuristic Theme (Violet Accent)
+   ═══════════════════════════════════════════════════════════════ */
+@theme {
+  --color-brand-dark: #0A0A0F;
+  --color-brand-charcoal: #12121A;
+  --color-brand-slate: #94A3B8;
+  --color-brand-gray: #64748B;
+  --color-brand-light: #CBD5E1;
+  --color-brand-white: #FFFFFF;
+  --color-brand-border: rgba(255, 255, 255, 0.06);
+
+  --color-accent: #8B5CF6;
+  --color-accent-light: #A78BFA;
+  --color-accent-dark: #7C3AED;
+
+  --color-gold: #DAA520;
+  --color-emerald: #10B981;
+  --color-blue: #4D7CFF;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ═══════════════ BASE ═══════════════ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-brand-slate);
+  background-color: var(--color-brand-dark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.font-mono { font-family: var(--font-mono); }
+
+::selection {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+img { transition: opacity 0.3s ease; }
+
+/* ═══════════════ GRID PATTERN BACKGROUND ═══════════════ */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 30%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════ NOISE OVERLAY ═══════════════ */
+.noise-overlay::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* ═══════════════ GLASSMORPHISM ═══════════════ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+}
+
+.glass-card:hover {
+  border-color: rgba(139, 92, 246, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ═══════════════ SPECULAR ROTATING BORDER ═══════════════ */
+@property --spec-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.specular-border {
+  position: relative;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(var(--color-brand-dark), var(--color-brand-dark)) padding-box,
+    conic-gradient(from var(--spec-angle), transparent 60%, rgba(139, 92, 246, 0.2) 80%, transparent 100%) border-box;
+  border: 1px solid transparent;
+  animation: specular-spin 6s linear infinite;
+}
+
+@keyframes specular-spin {
+  to { --spec-angle: 360deg; }
+}
+
+/* ═══════════════ SECTION HEADING ═══════════════ */
+.section-label {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════ SCROLL PROGRESS BAR ═══════════════ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+  z-index: 100;
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* ═══════════════ NAV GLASSMORPHISM ═══════════════ */
+.nav-glass {
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.nav-glass.scrolled {
+  background: rgba(10, 10, 15, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ═══════════════ BUTTONS ═══════════════ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: var(--color-accent);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--color-accent-light);
+  font-weight: 600;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 0.75rem;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* ═══════════════ VENTURE CARD ACCENT BORDERS ═══════════════ */
+.venture-gold { border-color: rgba(218, 165, 32, 0.3); }
+.venture-gold:hover { border-color: rgba(218, 165, 32, 0.5); }
+
+.venture-emerald { border-color: rgba(16, 185, 129, 0.3); }
+.venture-emerald:hover { border-color: rgba(16, 185, 129, 0.5); }
+
+.venture-blue { border-color: rgba(77, 124, 255, 0.3); }
+.venture-blue:hover { border-color: rgba(77, 124, 255, 0.5); }
+
+/* ═══════════════ ANIMATIONS ═══════════════ */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-blink { animation: terminal-blink 1s infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+.scroll-cue {
+  animation: float 2s ease-in-out infinite;
+}
+
+/* ═══════════════ GRADIENT TEXT ═══════════════ */
+.gradient-violet {
+  background: linear-gradient(135deg, var(--color-accent-light), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════ GSAP DATA-REVEAL INITIAL STATES ═══════════════ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* ═══════════════ ACCESSIBILITY ═══════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .scroll-progress,
+  .specular-border {
+    animation: none;
+  }
+
+  .grid-bg,
+  .noise-overlay::after {
+    display: none;
+  }
+
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1;
+    transform: none;
+  }
+}
