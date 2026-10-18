@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import GlassCard from "../components/GlassCard.astro";
+import ReaderSection from "../components/ReaderSection.astro";
 ---
 
 <Layout>
@@ -48,7 +49,7 @@ import GlassCard from "../components/GlassCard.astro";
 
       <div class="grid md:grid-cols-3 gap-8" data-reveal-stagger>
         <!-- Publishing -->
-        <a href="https://davidjpublishing.com" target="_blank" rel="noopener noreferrer" class="group glass-card venture-gold overflow-hidden block">
+        <a href="https://publishing.davidjcharlot.com" target="_blank" rel="noopener noreferrer" class="group glass-card venture-gold overflow-hidden block">
           <div class="p-8">
             <div class="w-14 h-14 mb-5 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center">
               <svg class="w-7 h-7 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +59,7 @@ import GlassCard from "../components/GlassCard.astro";
             <h3 class="font-display text-2xl font-bold text-white mb-2 group-hover:text-gold transition-colors">David J Charlot Publishing</h3>
             <p class="text-brand-gray text-sm font-mono mb-3">// Fiction & Non-Fiction</p>
             <p class="text-brand-slate leading-relaxed mb-6">
-              20 titles spanning science fiction epics, children's adventure series, AI philosophy, faith, and patent law. Stories that spark the imagination and ideas that reshape understanding.
+              More than 350 titles spanning science fiction epics, children's adventure series, AI philosophy, faith, and patent law. Stories that spark the imagination and ideas that reshape understanding.
             </p>
             <span class="inline-flex items-center gap-2 text-gold text-sm font-semibold group-hover:gap-3 transition-all">
               Explore the Catalog
@@ -113,6 +114,9 @@ import GlassCard from "../components/GlassCard.astro";
           </div>
         </a>
       </div>
+
+      <!-- The Reader: the books, free to read and to hear -->
+      <ReaderSection />
     </div>
   </section>
 
